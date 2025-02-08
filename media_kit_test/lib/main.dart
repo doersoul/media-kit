@@ -39,6 +39,8 @@ class _MyAppState extends State<MyApp> {
     _player.open(Media(
       'https://h2.inkwai.com/bs2/upload-ylab-stunt/special-effect/output/dfbc56ef-9114-459c-9568-0a1ab1dd1d14/313474993049752786/out.mp4',
     ));
+
+    _player.setPlaylistMode(PlaylistMode.single);
   }
 
   @override
@@ -62,7 +64,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: MediaKitVideoView(
           controller: _controller,
-          color: Colors.black,
+          color: Colors.transparent,
           fit: MediaKitVideoViewFit.contain,
         ),
         bottomNavigationBar: BottomAppBar(
