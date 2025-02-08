@@ -5,6 +5,7 @@
 /// Use of this source code is governed by MIT license that can be found in the LICENSE file.
 import 'dart:async';
 import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
@@ -24,7 +25,7 @@ class MediaKitVideoPlayer extends VideoPlayerPlatform {
   // The implementation uses [Player.hashCode] as texture ID.
   final _players = HashMap<int, Player>();
   final _completers = HashMap<int, Completer<void>>();
-  final _videoControllers = HashMap<int, VideoController>();
+  final _videoControllers = HashMap<int, MediaKitVideoController>();
   final _streamControllers = HashMap<int, StreamController<VideoEvent>>();
   final _streamSubscriptions = HashMap<int, List<StreamSubscription>>();
 
@@ -69,7 +70,7 @@ class MediaKitVideoPlayer extends VideoPlayerPlatform {
   Future<int?> create(DataSource dataSource) async {
     final player = Player();
     final completer = Completer();
-    final videoController = VideoController(player);
+    final videoController = MediaKitVideoController(player);
     // NOTE: [StreamController] without broadcast buffers events.
     final streamController = StreamController<VideoEvent>();
     final streamSubscriptions = <StreamSubscription>[];
@@ -185,14 +186,11 @@ class MediaKitVideoPlayer extends VideoPlayerPlatform {
       throw StateError(
           'VideoPlayer for textureId $textureId is not found, Check if its disposed.');
     }
-    return Video(
+    return MediaKitVideoView(
       key: ValueKey(_videoControllers[textureId]!),
       controller: _videoControllers[textureId]!,
-      wakelock: false,
-      controls: NoVideoControls,
-      fill: const Color(0x00000000),
-      pauseUponEnteringBackgroundMode: false,
-      resumeUponEnteringForegroundMode: false,
+      color: Colors.black,
+      fit: MediaKitVideoViewFit.contain,
     );
   }
 

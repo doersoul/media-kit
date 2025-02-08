@@ -4,11 +4,7 @@
 /// All rights reserved.
 /// Use of this source code is governed by MIT license that can be found in the LICENSE file.
 
-export 'package:media_kit_video/src/video_controller/platform_video_controller.dart';
-export 'package:media_kit_video/src/video_controller/video_controller.dart';
-export 'package:media_kit_video/src/video_view_parameters.dart';
-export 'package:media_kit_video/src/video/video.dart';
-
-export 'package:media_kit_video/src/subtitle/subtitle_view.dart';
-
-export 'package:media_kit_video/media_kit_video_controls/media_kit_video_controls.dart';
+export 'package:media_kit_video/src/controller/media_kit_video_controller.dart';
+export 'package:media_kit_video/src/model/media_kit_video_configuration.dart';
+export 'package:media_kit_video/src/model/media_kit_video_view_fit.dart';
+export 'package:media_kit_video/src/view/media_kit_video_view.dart';
