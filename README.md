@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     _player.open(Media(
-      'https://us-xpc11.xpccdn.com/5e152f32b86b5.mp4',
+      'https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4',
     ));
 
     _player.setPlaylistMode(PlaylistMode.single);
