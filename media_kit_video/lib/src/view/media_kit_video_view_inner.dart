@@ -254,7 +254,7 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
       ];
 
       if (!_videoRenderStart) {
-        final Widget? cover = widget.coverBuilder?.call(context, widget.fit);
+        final Widget? cover = widget.coverBuilder?.call(ctx, widget.fit);
         if (cover != null) {
           stack.add(Positioned.fromRect(
             rect: Rect.fromLTWH(
