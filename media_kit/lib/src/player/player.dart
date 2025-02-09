@@ -121,7 +121,7 @@ class Player {
   PlatformPlayer? platform;
 
   /// Disposes the [Player] instance & releases the resources.
-  bool disposing = false;
+  bool disposed = false;
 
   /// Current state of the [Player].
   PlayerState get state => platform!.state;
@@ -135,7 +135,7 @@ class Player {
 
   /// Disposes the [Player] instance & releases the resources.
   Future<void> dispose() async {
-    disposing = true;
+    disposed = true;
 
     return platform?.dispose();
   }
