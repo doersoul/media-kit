@@ -77,6 +77,33 @@ class MediaKitVideoViewState extends State<MediaKitVideoView> {
     fullScreen = true;
 
     final NavigatorState navigator = Navigator.of(context, rootNavigator: true);
+    Future<Null> exit = navigator.push(PageRouteBuilder<Null>(
+      settings: const RouteSettings(name: mediaKitVideoFullScreenRouteName),
+      pageBuilder: (ctx, animation, secondaryAnimation) {
+        return AnimatedBuilder(
+          animation: animation,
+          builder: (innerCtx, child) {
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: MediaKitVideoViewInner(
+                state: this,
+                fit: MediaKitVideoViewFit.contain,
+                color: Colors.black,
+                observer: _observer,
+              ),
+            );
+          },
+        );
+      },
+    ));
+
+    // will lead to rebuild
+    if (widget.onEnterFullScreen != null) {
+      widget.onEnterFullScreen!.call();
+    } else {
+      MediaKitOrientationUtils.hideSystemBar();
+    }
+
     final Size? videoSize = widget.controller.rect.value?.size;
     final double videoWidth = videoSize?.width ?? -1;
     final double videoHeight = videoSize?.height ?? -1;
@@ -97,32 +124,7 @@ class MediaKitVideoViewState extends State<MediaKitVideoView> {
       }
     }
 
-    // will lead to rebuild
-    if (widget.onEnterFullScreen != null) {
-      widget.onEnterFullScreen!.call();
-    } else {
-      MediaKitOrientationUtils.hideSystemBar();
-    }
-
-    await navigator.push(PageRouteBuilder<Null>(
-      settings: const RouteSettings(name: mediaKitVideoFullScreenRouteName),
-      pageBuilder: (ctx, animation, secondaryAnimation) {
-        return AnimatedBuilder(
-          animation: animation,
-          builder: (innerCtx, child) {
-            return Scaffold(
-              resizeToAvoidBottomInset: false,
-              body: MediaKitVideoViewInner(
-                state: this,
-                fit: MediaKitVideoViewFit.contain,
-                color: Colors.black,
-                observer: _observer,
-              ),
-            );
-          },
-        );
-      },
-    ));
+    await exit;
 
     fullScreen = false;
 
