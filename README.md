@@ -1,4 +1,4 @@
-fork https://github.com/media-kit/media-kit
+forked from https://github.com/media-kit/media-kit
 
 ## Installation
 
