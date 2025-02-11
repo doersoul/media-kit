@@ -112,13 +112,13 @@ class MediaKitVideoViewState extends State<MediaKitVideoView> {
     // will lead to rebuild
     if (videoWidth >= videoHeight) {
       if (orientation == Orientation.portrait) {
-        await MediaKitOrientationUtils.setOrientationLandscape();
+        MediaKitOrientationUtils.setOrientationLandscape();
 
         _changed = true;
       }
     } else {
       if (orientation == Orientation.landscape) {
-        await MediaKitOrientationUtils.setOrientationPortrait();
+        MediaKitOrientationUtils.setOrientationPortrait();
 
         _changed = true;
       }
@@ -130,9 +130,9 @@ class MediaKitVideoViewState extends State<MediaKitVideoView> {
 
     if (_changed) {
       if (videoWidth >= videoHeight) {
-        await MediaKitOrientationUtils.setOrientationPortrait();
+        MediaKitOrientationUtils.setOrientationPortrait();
       } else {
-        await MediaKitOrientationUtils.setOrientationLandscape();
+        MediaKitOrientationUtils.setOrientationLandscape();
       }
     }
 
