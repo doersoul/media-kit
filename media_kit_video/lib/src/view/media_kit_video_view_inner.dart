@@ -83,6 +83,7 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
     widget.controller.rect.addListener(_playerListener);
 
     _subscriptions = [
+      widget.controller.player.stream.playing.listen(_playerListener),
       widget.controller.player.stream.width.listen(_playerListener),
       widget.controller.player.stream.height.listen(_playerListener),
     ];
@@ -104,8 +105,11 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
     final Size? size = widget.controller.rect.value?.size;
     final double videoWidth = size?.width ?? -1;
     final double videoHeight = size?.height ?? -1;
-    final bool videoRenderStart =
-        textureId > -1 && videoWidth > 0 && videoHeight > 0;
+    final bool videoRenderStart = _videoRenderStart ||
+        (textureId > -1 &&
+            videoWidth > 0 &&
+            videoHeight > 0 &&
+            widget.player.state.playing);
 
     if (_textureId != textureId ||
         _videoWidth != videoWidth ||
