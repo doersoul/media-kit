@@ -37,6 +37,8 @@ class MediaKitVideoViewInner extends StatefulWidget {
 class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
   late List<StreamSubscription> _subscriptions;
 
+  late bool _playable;
+
   late int _textureId;
   late double _videoWidth;
   late double _videoHeight;
@@ -74,6 +76,7 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
   }
 
   void _initPlayerListener() {
+    _playable = false;
     _textureId = -1;
     _videoWidth = -1;
     _videoHeight = -1;
@@ -101,15 +104,16 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
   }
 
   Future<void> _playerListener([_]) async {
+    _playable = _playable || widget.player.state.playing;
+
     final int textureId = widget.controller.id.value ?? -1;
     final Size? size = widget.controller.rect.value?.size;
     final double videoWidth = size?.width ?? -1;
     final double videoHeight = size?.height ?? -1;
+
     final bool videoRenderStart = _videoRenderStart ||
-        (textureId > -1 &&
-            videoWidth > 0 &&
-            videoHeight > 0 &&
-            widget.player.state.playing);
+        widget.player.state.position.inMilliseconds > 0 ||
+        (textureId > -1 && videoWidth > 0 && videoHeight > 0 && _playable);
 
     if (_textureId != textureId ||
         _videoWidth != videoWidth ||
