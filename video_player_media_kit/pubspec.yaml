@@ -21,8 +21,8 @@ dependencies:
   media_kit: ^1.1.10
   media_kit_video: ^1.2.4
 
-  universal_platform: ^1.0.0+1
-  video_player_platform_interface: ^6.2.0
+  universal_platform: ^1.1.0
+  video_player_platform_interface: ^6.3.0
 
 dev_dependencies:
   flutter_test:

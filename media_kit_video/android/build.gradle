@@ -36,3 +36,25 @@ android {
         consumerProguardFiles 'proguard-rules.pro'
     }
 }
+
+//def localProperties = new Properties()
+//def localPropertiesFile = rootProject.file('local.properties')
+//if (localPropertiesFile.exists()) {
+//    localProperties.load(new FileInputStream(localPropertiesFile))
+//}
+//
+//def flutterRoot = localProperties.getProperty('flutter.sdk')
+//if (flutterRoot == null) {
+//    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+//}
+//
+//def flutterEnginePath = "$flutterRoot/bin/cache/artifacts/engine/android-arm/flutter.jar"
+//
+//if (!file(flutterEnginePath).exists()) {
+//    throw new GradleException("Flutter engine library not found at: $flutterEnginePath")
+//}
+//
+//dependencies {
+//    compileOnly files(flutterEnginePath)
+//    compileOnly 'androidx.annotation:annotation:1.1.0'
+//}
