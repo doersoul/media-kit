@@ -233,12 +233,12 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
     return resolvedAlignment.alongOffset(diff);
   }
 
-  Widget _buildTexture() {
+  Widget _buildTexture(int textureId) {
     Widget texture = const SizedBox.shrink();
-    if (_textureId > -1) {
+    if (textureId > -1) {
       texture = RepaintBoundary(
         child: Texture(
-          textureId: _textureId,
+          textureId: textureId,
           filterQuality: FilterQuality.medium,
         ),
       );
@@ -253,6 +253,24 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
 
   @override
   Widget build(BuildContext context) {
+    int textureId = _textureId;
+    if (textureId < 0) {
+      textureId = widget.controller.id.value ?? -1;
+    }
+
+    bool videoRenderStart = _videoRenderStart;
+    if (!videoRenderStart) {
+      videoRenderStart = widget.player.state.position.inMilliseconds > 0;
+    }
+
+    if (!videoRenderStart) {
+      final Size? size = widget.controller.rect.value?.size;
+      final double width = size?.width ?? -1;
+      final double height = size?.height ?? -1;
+
+      videoRenderStart = textureId > -1 && width > 0 && height > 0 && _playable;
+    }
+
     return LayoutBuilder(builder: (ctx, constraints) {
       final List<Widget> stack = [
         Container(
@@ -262,7 +280,7 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
         ),
       ];
 
-      if (!_videoRenderStart) {
+      if (!videoRenderStart) {
         final Widget? cover = widget.coverBuilder?.call(ctx, widget.fit);
         if (cover != null) {
           stack.add(Positioned.fromRect(
@@ -286,7 +304,7 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
           size.height,
         );
 
-        final Widget texture = _buildTexture();
+        final Widget texture = _buildTexture(textureId);
         stack.add(Positioned.fromRect(
           rect: position,
           child: ColoredBox(
