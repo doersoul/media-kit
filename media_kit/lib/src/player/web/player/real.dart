@@ -297,6 +297,9 @@ class WebPlayer extends PlatformPlayer {
       }
       await waitForPlayerInitialization;
       await waitForVideoControllerInitializationIfAttached;
+      if (disposed) {
+        throw AssertionError('[Player] has been disposed');
+      }
 
       // To match NativePlayer behavior.
 
