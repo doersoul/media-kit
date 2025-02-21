@@ -92,9 +92,6 @@ class NativePlayer extends PlatformPlayer {
       }
       await waitForPlayerInitialization;
       await waitForVideoControllerInitializationIfAttached;
-      if (disposed) {
-        throw AssertionError('[Player] has been disposed');
-      }
 
       await NativeReferenceHolder.instance.remove(ctx);
       await stop(notify: false, synchronized: false);

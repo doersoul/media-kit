@@ -120,9 +120,6 @@ class Player {
   /// Platform specific internal implementation initialized depending upon the current platform.
   PlatformPlayer? platform;
 
-  /// Disposes the [Player] instance & releases the resources.
-  bool disposed = false;
-
   /// Current state of the [Player].
   PlayerState get state => platform!.state;
 
@@ -134,8 +131,15 @@ class Player {
   PlayerStream get streams => stream;
 
   /// Disposes the [Player] instance & releases the resources.
+  bool disposed = false;
+
+  /// Pause the [Player] instance
+  bool paused = false;
+
+  /// Disposes the [Player] instance & releases the resources.
   Future<void> dispose() async {
     disposed = true;
+    paused = true;
 
     return platform?.dispose();
   }
@@ -162,6 +166,8 @@ class Player {
     Playable playable, {
     bool play = true,
   }) async {
+    paused = false;
+
     return platform?.open(
       playable,
       play: play,
@@ -176,18 +182,22 @@ class Player {
 
   /// Starts playing the [Player].
   Future<void> play() async {
+    paused = false;
+
     return platform?.play();
   }
 
   /// Pauses the [Player].
   Future<void> pause() async {
+    paused = true;
+
     return platform?.pause();
   }
 
   /// Cycles between [play] & [pause] states of the [Player].
-  Future<void> playOrPause() async {
-    return platform?.playOrPause();
-  }
+  // Future<void> playOrPause() async {
+  //   return platform?.playOrPause();
+  // }
 
   /// Appends a [Media] to the [Player]'s playlist.
   Future<void> add(Media media) async {
