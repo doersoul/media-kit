@@ -25,6 +25,8 @@ class MediaKitVideoViewInner extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MediaKitVideoViewInnerState();
 
+  bool get showCoverFirst => state.widget.showCoverFirst;
+
   MediaKitVideoController get controller => state.widget.controller;
 
   Player get player => controller.player;
@@ -110,10 +112,14 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
     final Size? size = widget.controller.rect.value?.size;
     final double videoWidth = size?.width ?? -1;
     final double videoHeight = size?.height ?? -1;
+    final bool ready = _videoRenderStart ||
+        (textureId > -1 && videoWidth > 0 && videoHeight > 0);
 
-    final bool videoRenderStart = _videoRenderStart ||
-        widget.player.state.position.inMilliseconds > 0 ||
-        (textureId > -1 && videoWidth > 0 && videoHeight > 0 && _playable);
+    bool videoRenderStart = ready;
+    if (widget.showCoverFirst) {
+      videoRenderStart = (videoRenderStart && _playable) ||
+          widget.player.state.position.inMilliseconds > 0;
+    }
 
     if (_textureId != textureId ||
         _videoWidth != videoWidth ||

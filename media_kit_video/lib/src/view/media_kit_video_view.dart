@@ -24,6 +24,7 @@ class MediaKitVideoView extends StatefulWidget {
   final double? height;
   final Color color;
   final MediaKitVideoViewFit fit;
+  final bool showCoverFirst;
   final VoidCallback? onEnterFullScreen;
   final VoidCallback? onExitFullScreen;
   final MediaVideoCoverBuilder? coverBuilder;
@@ -36,6 +37,7 @@ class MediaKitVideoView extends StatefulWidget {
     this.height,
     required this.color,
     required this.fit,
+    this.showCoverFirst = true,
     this.onEnterFullScreen,
     this.onExitFullScreen,
     this.coverBuilder,
