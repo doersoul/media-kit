@@ -95,7 +95,7 @@ class NativePlayer extends PlatformPlayer {
 
       await NativeReferenceHolder.instance.remove(ctx);
 
-      // tips modified here
+      // tips: modified here
       if (Platform.isIOS) {
         await _command(['quit']);
       } else {
@@ -108,7 +108,7 @@ class NativePlayer extends PlatformPlayer {
 
       Initializer(mpv).dispose(ctx);
 
-      // tips modified here
+      // tips: modified here
       if (!Platform.isIOS) {
         Future.delayed(const Duration(seconds: 5), () {
           mpv.mpv_terminate_destroy(ctx);
