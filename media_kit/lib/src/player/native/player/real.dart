@@ -94,8 +94,6 @@ class NativePlayer extends PlatformPlayer {
       await waitForVideoControllerInitializationIfAttached;
 
       await NativeReferenceHolder.instance.remove(ctx);
-
-      // tips: modified here
       // await stop(notify: false, synchronized: false);
       await _command(['quit']);
 
@@ -105,7 +103,6 @@ class NativePlayer extends PlatformPlayer {
 
       Initializer(mpv).dispose(ctx);
 
-      // tips: modified here
       // Future.delayed(const Duration(seconds: 5), () {
       //   mpv.mpv_terminate_destroy(ctx);
       // });
