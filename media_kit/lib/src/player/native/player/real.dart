@@ -96,11 +96,12 @@ class NativePlayer extends PlatformPlayer {
       await NativeReferenceHolder.instance.remove(ctx);
 
       // tips: modified here
-      if (Platform.isIOS) {
-        await _command(['quit']);
-      } else {
-        await stop(notify: false, synchronized: false);
-      }
+      // if (Platform.isIOS) {
+      //   await _command(['quit']);
+      // } else {
+      //   await stop(notify: false, synchronized: false);
+      // }
+      await _command(['quit']);
 
       disposed = true;
 
