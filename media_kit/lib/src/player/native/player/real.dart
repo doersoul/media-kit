@@ -106,7 +106,7 @@ class NativePlayer extends PlatformPlayer {
 
       Initializer(mpv).dispose(ctx);
 
-      // tips: modified here，un
+      // tips: modified here，no destroy on iOS
       if (!Platform.isIOS) {
         Future.delayed(const Duration(seconds: 5), () {
           mpv.mpv_terminate_destroy(ctx);
