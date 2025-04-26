@@ -90,13 +90,16 @@ class NativePlayer extends PlatformPlayer {
       if (disposed) {
         throw AssertionError('[Player] has been disposed');
       }
+
       await waitForPlayerInitialization;
       await waitForVideoControllerInitializationIfAttached;
 
       await NativeReferenceHolder.instance.remove(ctx);
 
       // tips: modified here, add quit
-      await _command(['quit']);
+      if (Platform.isIOS) {
+        await _command(['quit']);
+      }
 
       await stop(notify: false, synchronized: false);
 
@@ -107,8 +110,10 @@ class NativePlayer extends PlatformPlayer {
       Initializer(mpv).dispose(ctx);
 
       // tips: modified here，no destroy on iOS
-      if (!Platform.isIOS) {
+      if (Platform.isAndroid) {
         Future.delayed(const Duration(seconds: 5), () {
+          _command(['quit']);
+
           mpv.mpv_terminate_destroy(ctx);
         });
       }
