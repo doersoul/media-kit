@@ -7,10 +7,11 @@
 import 'dart:collection';
 import 'dart:js_interop';
 import 'dart:typed_data';
+import 'package:web/web.dart' as html;
 
 import 'package:media_kit/src/models/playable.dart';
+
 import 'package:media_kit/src/player/web/utils/asset_loader.dart';
-import 'package:web/web.dart' as html;
 
 /// {@template media}
 ///

@@ -3,9 +3,9 @@
 /// Copyright © 2021 & onwards, Hitesh Kumar Saini <saini123hitesh@gmail.com>.
 /// All rights reserved.
 /// Use of this source code is governed by MIT license that can be found in the LICENSE file.
-import 'dart:ffi';
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 import 'dart:io';
+import 'dart:ffi';
 
 import 'package:media_kit/ffi/ffi.dart';
 
