@@ -140,15 +140,9 @@ class MediaKitVideoController {
   /// Remember:
   /// * “Premature optimization is the root of all evil”
   /// * “With great power comes great responsibility”
-  Future<void> setSize({
-    int? width,
-    int? height,
-  }) async {
+  Future<void> setSize({int? width, int? height}) async {
     final instance = await platform.future;
-    return instance.setSize(
-      width: width,
-      height: height,
-    );
+    return instance.setSize(width: width, height: height);
   }
 
   /// A [Future] that completes when the first video frame has been rendered.

@@ -6,9 +6,7 @@ import 'package:media_kit_video/src/util/media_kit_orientation_utils.dart';
 import 'package:media_kit_video/src/view/media_kit_video_view_inner.dart';
 
 typedef MediaVideoCoverBuilder = Widget Function(
-  BuildContext context,
-  MediaKitVideoViewFit fit,
-);
+    BuildContext context, MediaKitVideoViewFit fit);
 
 typedef MediaVideoSkinBuilder = Widget Function(
   MediaKitVideoViewState viewState,
@@ -79,25 +77,27 @@ class MediaKitVideoViewState extends State<MediaKitVideoView> {
     fullScreen = true;
 
     final NavigatorState navigator = Navigator.of(context, rootNavigator: true);
-    Future<Null> exit = navigator.push(PageRouteBuilder<Null>(
-      settings: const RouteSettings(name: mediaKitVideoFullScreenRouteName),
-      pageBuilder: (ctx, animation, secondaryAnimation) {
-        return AnimatedBuilder(
-          animation: animation,
-          builder: (innerCtx, child) {
-            return Scaffold(
-              resizeToAvoidBottomInset: false,
-              body: MediaKitVideoViewInner(
-                state: this,
-                fit: MediaKitVideoViewFit.contain,
-                color: Colors.black,
-                observer: _observer,
-              ),
-            );
-          },
-        );
-      },
-    ));
+    Future<Null> exit = navigator.push(
+      PageRouteBuilder<Null>(
+        settings: const RouteSettings(name: mediaKitVideoFullScreenRouteName),
+        pageBuilder: (ctx, animation, secondaryAnimation) {
+          return AnimatedBuilder(
+            animation: animation,
+            builder: (innerCtx, child) {
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                body: MediaKitVideoViewInner(
+                  state: this,
+                  fit: MediaKitVideoViewFit.contain,
+                  color: Colors.black,
+                  observer: _observer,
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
 
     // will lead to rebuild
     if (widget.onEnterFullScreen != null) {

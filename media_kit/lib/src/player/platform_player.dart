@@ -6,20 +6,20 @@
 
 import 'dart:async';
 import 'dart:typed_data';
-import 'package:meta/meta.dart';
-import 'package:collection/collection.dart';
 
-import 'package:media_kit/src/models/track.dart';
-import 'package:media_kit/src/models/playable.dart';
-import 'package:media_kit/src/models/playlist.dart';
-import 'package:media_kit/src/models/player_log.dart';
-import 'package:media_kit/src/models/media/media.dart';
+import 'package:collection/collection.dart';
 import 'package:media_kit/src/models/audio_device.dart';
 import 'package:media_kit/src/models/audio_params.dart';
-import 'package:media_kit/src/models/video_params.dart';
+import 'package:media_kit/src/models/media/media.dart';
+import 'package:media_kit/src/models/playable.dart';
+import 'package:media_kit/src/models/player_log.dart';
 import 'package:media_kit/src/models/player_state.dart';
-import 'package:media_kit/src/models/playlist_mode.dart';
 import 'package:media_kit/src/models/player_stream.dart';
+import 'package:media_kit/src/models/playlist.dart';
+import 'package:media_kit/src/models/playlist_mode.dart';
+import 'package:media_kit/src/models/track.dart';
+import 'package:media_kit/src/models/video_params.dart';
+import 'package:meta/meta.dart';
 
 /// {@template platform_player}
 /// PlatformPlayer
@@ -79,6 +79,9 @@ abstract class PlatformPlayer {
     playlistModeController.stream.distinct(
       (previous, current) => previous == current,
     ),
+    shuffleController.stream.distinct(
+      (previous, current) => previous == current,
+    ),
     /* AUDIO-PARAMS STREAM SHOULD NOT BE DISTINCT */
     audioParamsController.stream,
     /* VIDEO-PARAMS STREAM SHOULD NOT BE DISTINCT */
@@ -130,6 +133,7 @@ abstract class PlatformPlayer {
         bufferingPercentageController.close(),
         bufferController.close(),
         playlistModeController.close(),
+        shuffleController.close(),
         audioParamsController.close(),
         videoParamsController.close(),
         audioBitrateController.close(),
@@ -342,6 +346,10 @@ abstract class PlatformPlayer {
   @protected
   final StreamController<PlaylistMode> playlistModeController =
       StreamController<PlaylistMode>.broadcast();
+
+  @protected
+  final StreamController<bool> shuffleController =
+      StreamController<bool>.broadcast();
 
   @protected
   final StreamController<PlayerLog> logController =

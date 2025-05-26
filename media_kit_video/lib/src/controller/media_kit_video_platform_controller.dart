@@ -34,10 +34,7 @@ abstract class MediaKitVideoPlatformController {
   final ValueNotifier<Rect?> rect = ValueNotifier<Rect?>(null);
 
   /// {@macro platform_video_controller}
-  MediaKitVideoPlatformController(
-    this.player,
-    this.configuration,
-  );
+  MediaKitVideoPlatformController(this.player, this.configuration);
 
   /// Sets the required size of the video output.
   /// This may yield substantial performance improvements if a small [width] & [height] is specified.

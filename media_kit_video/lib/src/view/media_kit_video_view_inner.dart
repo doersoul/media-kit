@@ -277,61 +277,71 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
       videoRenderStart = textureId > -1 && width > 0 && height > 0 && _playable;
     }
 
-    return LayoutBuilder(builder: (ctx, constraints) {
-      final List<Widget> stack = [
-        Container(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight,
-          color: widget.color,
-        ),
-      ];
-
-      if (!videoRenderStart) {
-        final Widget? cover = widget.coverBuilder?.call(ctx, widget.fit);
-        if (cover != null) {
-          stack.add(Positioned.fromRect(
-            rect: Rect.fromLTWH(
-              0,
-              0,
-              constraints.maxWidth,
-              constraints.maxHeight,
-            ),
-            child: cover,
-          ));
-        }
-      } else {
-        final Size size = _getTextureSize(constraints, widget.fit);
-
-        final Offset offset = _getTextureOffset(constraints, size, widget.fit);
-        final Rect position = Rect.fromLTWH(
-          offset.dx,
-          offset.dy,
-          size.width,
-          size.height,
-        );
-
-        final Widget texture = _buildTexture(textureId);
-        stack.add(Positioned.fromRect(
-          rect: position,
-          child: ColoredBox(
-            // tips: modify here - color
-            // color: const Color(0xFF000000),
-            color: Colors.transparent,
-            child: texture,
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        final List<Widget> stack = [
+          Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            color: widget.color,
           ),
-        ));
+        ];
 
-        final Widget? skin = widget.skinBuilder?.call(
-          widget.state,
-          constraints.biggest,
-          position,
-        );
-        if (skin != null) {
-          stack.add(skin);
+        if (!videoRenderStart) {
+          final Widget? cover = widget.coverBuilder?.call(ctx, widget.fit);
+          if (cover != null) {
+            stack.add(
+              Positioned.fromRect(
+                rect: Rect.fromLTWH(
+                  0,
+                  0,
+                  constraints.maxWidth,
+                  constraints.maxHeight,
+                ),
+                child: cover,
+              ),
+            );
+          }
+        } else {
+          final Size size = _getTextureSize(constraints, widget.fit);
+
+          final Offset offset = _getTextureOffset(
+            constraints,
+            size,
+            widget.fit,
+          );
+          final Rect position = Rect.fromLTWH(
+            offset.dx,
+            offset.dy,
+            size.width,
+            size.height,
+          );
+
+          final Widget texture = _buildTexture(textureId);
+          stack.add(
+            Positioned.fromRect(
+              rect: position,
+              child: ColoredBox(
+                // tips: modify here - color
+                // color: const Color(0xFF000000),
+                color: Colors.transparent,
+                child: texture,
+              ),
+            ),
+          );
+
+          final Widget? skin = widget.skinBuilder?.call(
+            widget.state,
+            constraints.biggest,
+            position,
+          );
+          if (skin != null) {
+            stack.add(skin);
+          }
         }
-      }
 
-      return Stack(fit: StackFit.expand, children: stack);
-    });
+        return Stack(fit: StackFit.expand, children: stack);
+      },
+    );
   }
 }

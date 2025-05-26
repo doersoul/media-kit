@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 
 class MediaKitOrientationUtils {
   static Future<void> setOrientationPortrait() async {
-    return SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp],
-    );
+    return SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   static Future<void> setOrientationLandscape() async {
@@ -32,23 +32,25 @@ class MediaKitOrientationUtils {
       overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
     );
 
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      // status bar
-      systemStatusBarContrastEnforced: false,
-      // for android
-      statusBarColor: Colors.transparent,
-      // for ios
-      statusBarBrightness: Brightness.light,
-      // for android
-      statusBarIconBrightness: Brightness.light,
-      // navigation bar
-      systemNavigationBarContrastEnforced: false,
-      // for android
-      systemNavigationBarColor: Colors.transparent,
-      // for android
-      systemNavigationBarIconBrightness: Brightness.dark,
-      // for android
-      systemNavigationBarDividerColor: Colors.transparent,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        // status bar
+        systemStatusBarContrastEnforced: false,
+        // for android
+        statusBarColor: Colors.transparent,
+        // for ios
+        statusBarBrightness: Brightness.light,
+        // for android
+        statusBarIconBrightness: Brightness.light,
+        // navigation bar
+        systemNavigationBarContrastEnforced: false,
+        // for android
+        systemNavigationBarColor: Colors.transparent,
+        // for android
+        systemNavigationBarIconBrightness: Brightness.dark,
+        // for android
+        systemNavigationBarDividerColor: Colors.transparent,
+      ),
+    );
   }
 }

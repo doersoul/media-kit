@@ -4,30 +4,28 @@
 /// All rights reserved.
 /// Use of this source code is governed by MIT license that can be found in the LICENSE file.
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 import 'dart:typed_data';
-import 'dart:collection';
-import 'package:web/web.dart' as web;
-import 'package:meta/meta.dart';
+
 import 'package:collection/collection.dart';
-import 'package:synchronized/synchronized.dart';
-
-import 'package:media_kit/src/player/platform_player.dart';
-
-import 'package:media_kit/src/player/web/utils/hls.dart';
-import 'package:media_kit/src/player/web/utils/duration.dart';
-
-import 'package:media_kit/src/models/track.dart';
-import 'package:media_kit/src/models/playable.dart';
-import 'package:media_kit/src/models/playlist.dart';
-import 'package:media_kit/src/models/media/media.dart';
 import 'package:media_kit/src/models/audio_device.dart';
-import 'package:media_kit/src/models/player_state.dart';
 import 'package:media_kit/src/models/audio_params.dart';
-import 'package:media_kit/src/models/video_params.dart';
+import 'package:media_kit/src/models/media/media.dart';
+import 'package:media_kit/src/models/playable.dart';
+import 'package:media_kit/src/models/player_state.dart';
+import 'package:media_kit/src/models/playlist.dart';
 import 'package:media_kit/src/models/playlist_mode.dart';
+import 'package:media_kit/src/models/track.dart';
+import 'package:media_kit/src/models/video_params.dart';
+import 'package:media_kit/src/player/platform_player.dart';
+import 'package:media_kit/src/player/web/utils/duration.dart';
+import 'package:media_kit/src/player/web/utils/hls.dart';
+import 'package:meta/meta.dart';
+import 'package:synchronized/synchronized.dart';
+import 'package:web/web.dart' as web;
 
 /// Initializes the web backend for package:media_kit.
 void webEnsureInitialized({String? libmpv}) {}
@@ -469,6 +467,7 @@ class WebPlayer extends PlatformPlayer {
         rate: state.rate,
         pitch: state.pitch,
         playlistMode: state.playlistMode,
+        shuffle: false,
         audioDevice: state.audioDevice,
         audioDevices: state.audioDevices,
       );
@@ -508,6 +507,9 @@ class WebPlayer extends PlatformPlayer {
       // if (!playlistModeController.isClosed) {
       //   playlistModeController.add(PlaylistMode.none);
       // }
+      if (!shuffleController.isClosed) {
+        shuffleController.add(false);
+      }
       if (!audioParamsController.isClosed) {
         audioParamsController.add(const AudioParams());
       }
@@ -1155,9 +1157,13 @@ class WebPlayer extends PlatformPlayer {
             [..._playlist],
             index: _index,
           ),
+          shuffle: shuffle,
         );
         if (!playlistController.isClosed) {
           playlistController.add(state.playlist);
+        }
+        if (!shuffleController.isClosed) {
+          shuffleController.add(shuffle);
         }
       } else if (!shuffle && _shuffle.isNotEmpty) {
         _playlist.clear();
@@ -1170,9 +1176,13 @@ class WebPlayer extends PlatformPlayer {
             [..._playlist],
             index: _index,
           ),
+          shuffle: shuffle,
         );
         if (!playlistController.isClosed) {
           playlistController.add(state.playlist);
+        }
+        if (!shuffleController.isClosed) {
+          shuffleController.add(shuffle);
         }
       }
     }

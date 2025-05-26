@@ -58,16 +58,14 @@ class MediaKitAndroidVideoController extends MediaKitVideoPlatformController {
       final vidValue = widValue == '0' ? 'no' : 'auto';
       // It is important to re-initialize --vo after --android-surface-size.
       await setProperty('vo', 'null');
-      await setProperties(
-        {
-          'android-surface-size': androidSurfaceSizeValue,
-          'wid': widValue,
-          'vo': voValue,
-          // It is important to re-initialize --vid in-case of --vo=mediacodec_embed.
-          // Not doing so causes error "Could not open codec." & video never gets rendered.
-          if (configuration.vo == 'mediacodec_embed') 'vid': vidValue,
-        },
-      );
+      await setProperties({
+        'android-surface-size': androidSurfaceSizeValue,
+        'wid': widValue,
+        'vo': voValue,
+        // It is important to re-initialize --vid in-case of --vo=mediacodec_embed.
+        // Not doing so causes error "Could not open codec." & video never gets rendered.
+        if (configuration.vo == 'mediacodec_embed') 'vid': vidValue,
+      });
     });
   }
 
@@ -97,10 +95,7 @@ class MediaKitAndroidVideoController extends MediaKitVideoPlatformController {
   StreamSubscription<VideoParams>? videoParamsSubscription;
 
   /// {@macro android_video_controller}
-  MediaKitAndroidVideoController._(
-    super.player,
-    super.configuration,
-  ) {
+  MediaKitAndroidVideoController._(super.player, super.configuration) {
     wid.addListener(widListener);
     platform.onLoadHooks.add(onLoadHook);
     platform.onUnloadHooks.add(onUnloadHook);
@@ -123,14 +118,11 @@ class MediaKitAndroidVideoController extends MediaKitVideoPlatformController {
           height = event.dw ?? 0;
         }
 
-        await _channel.invokeMethod(
-          'VideoOutputManager.SetSurfaceSize',
-          {
-            'handle': handle.toString(),
-            'width': width.toString(),
-            'height': height.toString(),
-          },
-        );
+        await _channel.invokeMethod('VideoOutputManager.SetSurfaceSize', {
+          'handle': handle.toString(),
+          'width': width.toString(),
+          'height': height.toString(),
+        });
 
         rect.value = Rect.fromLTWH(
           0.0,
@@ -192,10 +184,7 @@ class MediaKitAndroidVideoController extends MediaKitVideoPlatformController {
     }
 
     // Creation:
-    final controller = MediaKitAndroidVideoController._(
-      player,
-      configuration,
-    );
+    final controller = MediaKitAndroidVideoController._(player, configuration);
 
     // Register [_dispose] for execution upon [Player.dispose].
     player.platform?.release.add(controller._dispose);
@@ -216,31 +205,26 @@ class MediaKitAndroidVideoController extends MediaKitVideoPlatformController {
 
     controller.id.addListener(listener);
 
-    await _channel.invokeMethod(
-      'VideoOutputManager.Create',
-      {
-        'handle': handle.toString(),
-      },
-    );
+    await _channel.invokeMethod('VideoOutputManager.Create', {
+      'handle': handle.toString(),
+    });
 
     await completer.future;
     controller.id.removeListener(listener);
 
-    await controller.setProperties(
-      {
-        // It is necessary to set vo=null here to avoid SIGSEGV, --wid must be assigned before vo=gpu is set.
-        'vo': 'null',
-        'hwdec': configuration.hwdec!,
-        'vid': 'auto',
-        'opengl-es': 'yes',
-        'force-window': 'yes',
-        'gpu-context': 'android',
-        'sub-use-margins': 'no',
-        'sub-font-provider': 'none',
-        'sub-scale-with-window': 'yes',
-        'hwdec-codecs': 'h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1',
-      },
-    );
+    await controller.setProperties({
+      // It is necessary to set vo=null here to avoid SIGSEGV, --wid must be assigned before vo=gpu is set.
+      'vo': 'null',
+      'hwdec': configuration.hwdec!,
+      'vid': 'auto',
+      'opengl-es': 'yes',
+      'force-window': 'yes',
+      'gpu-context': 'android',
+      'sub-use-margins': 'no',
+      'sub-font-provider': 'none',
+      'sub-scale-with-window': 'yes',
+      'hwdec-codecs': 'h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1',
+    });
 
     // Return the [PlatformVideoController].
     return controller;
@@ -253,10 +237,7 @@ class MediaKitAndroidVideoController extends MediaKitVideoPlatformController {
   /// * “Premature optimization is the root of all evil”
   /// * “With great power comes great responsibility”
   @override
-  Future<void> setSize({
-    int? width,
-    int? height,
-  }) {
+  Future<void> setSize({int? width, int? height}) {
     throw UnsupportedError(
       '[MediaKitAndroidVideoController.setSize] is not available on Android',
     );
@@ -272,66 +253,61 @@ class MediaKitAndroidVideoController extends MediaKitVideoPlatformController {
     await videoParamsSubscription?.cancel();
     final handle = await player.handle;
     _controllers.remove(handle);
-    await _channel.invokeMethod(
-      'VideoOutputManager.Dispose',
-      {
-        'handle': handle.toString(),
-      },
-    );
+    await _channel.invokeMethod('VideoOutputManager.Dispose', {
+      'handle': handle.toString(),
+    });
   }
 
   /// Currently created [MediaKitAndroidVideoController]s.
   static final _controllers = HashMap<int, MediaKitAndroidVideoController>();
 
   /// [MethodChannel] for invoking platform specific native implementation.
-  static final _channel =
-      const MethodChannel('com.alexmercerind/media_kit_video')
-        ..setMethodCallHandler(
-          (MethodCall call) async {
-            try {
-              debugPrint(call.method.toString());
-              debugPrint(call.arguments.toString());
-              switch (call.method) {
-                case 'VideoOutput.Resize':
-                  {
-                    // Notify about updated texture ID & [Rect].
-                    final int handle = call.arguments['handle'];
-                    final Rect rect = Rect.fromLTWH(
-                      call.arguments['rect']['left'] * 1.0,
-                      call.arguments['rect']['top'] * 1.0,
-                      call.arguments['rect']['width'] * 1.0,
-                      call.arguments['rect']['height'] * 1.0,
-                    );
-                    final int id = call.arguments['id'];
-                    final int wid = call.arguments['wid'];
-                    _controllers[handle]?.rect.value = rect;
-                    _controllers[handle]?.id.value = id;
-                    // Only on Android:
-                    _controllers[handle]?.wid.value = wid;
-                    break;
-                  }
-                case 'VideoOutput.WaitUntilFirstFrameRenderedNotify':
-                  {
-                    // Notify about updated texture ID & [Rect].
-                    final int handle = call.arguments['handle'];
-                    debugPrint(handle.toString());
-                    // Notify about the first frame being rendered.
-                    final completer = _controllers[handle]
-                        ?.waitUntilFirstFrameRenderedCompleter;
-                    if (!(completer?.isCompleted ?? true)) {
-                      completer?.complete();
-                    }
-                    break;
-                  }
-                default:
-                  {
-                    break;
-                  }
-              }
-            } catch (exception, stacktrace) {
-              debugPrint(exception.toString());
-              debugPrint(stacktrace.toString());
+  static final _channel = const MethodChannel(
+    'com.alexmercerind/media_kit_video',
+  )..setMethodCallHandler((MethodCall call) async {
+      try {
+        debugPrint(call.method.toString());
+        debugPrint(call.arguments.toString());
+        switch (call.method) {
+          case 'VideoOutput.Resize':
+            {
+              // Notify about updated texture ID & [Rect].
+              final int handle = call.arguments['handle'];
+              final Rect rect = Rect.fromLTWH(
+                call.arguments['rect']['left'] * 1.0,
+                call.arguments['rect']['top'] * 1.0,
+                call.arguments['rect']['width'] * 1.0,
+                call.arguments['rect']['height'] * 1.0,
+              );
+              final int id = call.arguments['id'];
+              final int wid = call.arguments['wid'];
+              _controllers[handle]?.rect.value = rect;
+              _controllers[handle]?.id.value = id;
+              // Only on Android:
+              _controllers[handle]?.wid.value = wid;
+              break;
             }
-          },
-        );
+          case 'VideoOutput.WaitUntilFirstFrameRenderedNotify':
+            {
+              // Notify about updated texture ID & [Rect].
+              final int handle = call.arguments['handle'];
+              debugPrint(handle.toString());
+              // Notify about the first frame being rendered.
+              final completer =
+                  _controllers[handle]?.waitUntilFirstFrameRenderedCompleter;
+              if (!(completer?.isCompleted ?? true)) {
+                completer?.complete();
+              }
+              break;
+            }
+          default:
+            {
+              break;
+            }
+        }
+      } catch (exception, stacktrace) {
+        debugPrint(exception.toString());
+        debugPrint(stacktrace.toString());
+      }
+    });
 }

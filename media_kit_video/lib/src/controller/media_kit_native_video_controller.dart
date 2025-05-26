@@ -67,10 +67,8 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
   StreamSubscription<VideoParams>? videoParamsSubscription;
 
   /// {@macro native_video_controller}
-  MediaKitNativeVideoController._(
-    super.player,
-    super.configuration,
-  )   : width = configuration.width,
+  MediaKitNativeVideoController._(super.player, super.configuration)
+      : width = configuration.width,
         height = configuration.height {
     videoParamsSubscription = player.stream.videoParams.listen(
       (event) => lock.synchronized(() async {
@@ -98,14 +96,11 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
         videoParamsWidth = width;
         videoParamsHeight = height;
 
-        await _channel.invokeMethod(
-          'VideoOutputManager.SetSize',
-          {
-            'handle': handle.toString(),
-            'width': width.toString(),
-            'height': height.toString(),
-          },
-        );
+        await _channel.invokeMethod('VideoOutputManager.SetSize', {
+          'handle': handle.toString(),
+          'width': width.toString(),
+          'height': height.toString(),
+        });
       }),
     );
   }
@@ -142,10 +137,7 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
     }
 
     // Creation:
-    final controller = MediaKitNativeVideoController._(
-      player,
-      configuration,
-    );
+    final controller = MediaKitNativeVideoController._(player, configuration);
 
     // Register [_dispose] for execution upon [Player.dispose].
     player.platform?.release.add(controller._dispose);
@@ -153,13 +145,11 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
     // Store the [MediaKitNativeVideoController] in the [_controllers].
     _controllers[handle] = controller;
 
-    await controller.setProperties(
-      {
-        'vo': configuration.vo!,
-        'hwdec': configuration.hwdec!,
-        'vid': 'auto',
-      },
-    );
+    await controller.setProperties({
+      'vo': configuration.vo!,
+      'hwdec': configuration.hwdec!,
+      'vid': 'auto',
+    });
 
     // Wait until first texture ID is received.
     // We are not waiting on the native-side itself because it will block the UI thread.
@@ -174,18 +164,14 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
 
     controller.id.addListener(listener);
 
-    await _channel.invokeMethod(
-      'VideoOutputManager.Create',
-      {
-        'handle': handle.toString(),
-        'configuration': {
-          'width': configuration.width.toString(),
-          'height': configuration.height.toString(),
-          'enableHardwareAcceleration':
-              configuration.enableHardwareAcceleration,
-        },
+    await _channel.invokeMethod('VideoOutputManager.Create', {
+      'handle': handle.toString(),
+      'configuration': {
+        'width': configuration.width.toString(),
+        'height': configuration.height.toString(),
+        'enableHardwareAcceleration': configuration.enableHardwareAcceleration,
       },
-    );
+    });
 
     await completer.future;
     controller.id.removeListener(listener);
@@ -201,10 +187,7 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
   /// * “Premature optimization is the root of all evil”
   /// * “With great power comes great responsibility”
   @override
-  Future<void> setSize({
-    int? width,
-    int? height,
-  }) async {
+  Future<void> setSize({int? width, int? height}) async {
     final handle = await player.handle;
     if (this.width == width && this.height == height) {
       // No need to resize if the requested size is same as the current size.
@@ -214,25 +197,19 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
     if (width != null && height != null) {
       this.width = width;
       this.height = height;
-      await _channel.invokeMethod(
-        'VideoOutputManager.SetSize',
-        {
-          'handle': handle.toString(),
-          'width': width.toString(),
-          'height': height.toString(),
-        },
-      );
+      await _channel.invokeMethod('VideoOutputManager.SetSize', {
+        'handle': handle.toString(),
+        'width': width.toString(),
+        'height': height.toString(),
+      });
     } else {
       this.width = null;
       this.height = null;
-      await _channel.invokeMethod(
-        'VideoOutputManager.SetSize',
-        {
-          'handle': handle.toString(),
-          'width': videoParamsWidth?.toString() ?? 'null',
-          'height': videoParamsHeight?.toString() ?? 'null',
-        },
-      );
+      await _channel.invokeMethod('VideoOutputManager.SetSize', {
+        'handle': handle.toString(),
+        'width': videoParamsWidth?.toString() ?? 'null',
+        'height': videoParamsHeight?.toString() ?? 'null',
+      });
     }
   }
 
@@ -245,12 +222,9 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
     final handle = await player.handle;
     _controllers.remove(handle);
 
-    await _channel.invokeMethod(
-      'VideoOutputManager.Dispose',
-      {
-        'handle': handle.toString(),
-      },
-    );
+    await _channel.invokeMethod('VideoOutputManager.Dispose', {
+      'handle': handle.toString(),
+    });
   }
 
   /// Currently created [MediaKitNativeVideoController]s.
@@ -258,48 +232,46 @@ class MediaKitNativeVideoController extends MediaKitVideoPlatformController {
   static final _controllers = HashMap<int, MediaKitNativeVideoController>();
 
   /// [MethodChannel] for invoking platform specific native implementation.
-  static final _channel =
-      const MethodChannel('com.alexmercerind/media_kit_video')
-        ..setMethodCallHandler(
-          (MethodCall call) async {
-            try {
-              debugPrint(call.method.toString());
-              debugPrint(call.arguments.toString());
-              switch (call.method) {
-                case 'VideoOutput.Resize':
-                  {
-                    // Notify about updated texture ID & [Rect].
-                    final int handle = call.arguments['handle'];
-                    final Rect rect = Rect.fromLTWH(
-                      call.arguments['rect']['left'] * 1.0,
-                      call.arguments['rect']['top'] * 1.0,
-                      call.arguments['rect']['width'] * 1.0,
-                      call.arguments['rect']['height'] * 1.0,
-                    );
-                    final int id = call.arguments['id'];
+  static final _channel = const MethodChannel(
+    'com.alexmercerind/media_kit_video',
+  )..setMethodCallHandler((MethodCall call) async {
+      try {
+        debugPrint(call.method.toString());
+        debugPrint(call.arguments.toString());
+        switch (call.method) {
+          case 'VideoOutput.Resize':
+            {
+              // Notify about updated texture ID & [Rect].
+              final int handle = call.arguments['handle'];
+              final Rect rect = Rect.fromLTWH(
+                call.arguments['rect']['left'] * 1.0,
+                call.arguments['rect']['top'] * 1.0,
+                call.arguments['rect']['width'] * 1.0,
+                call.arguments['rect']['height'] * 1.0,
+              );
+              final int id = call.arguments['id'];
 
-                    _controllers[handle]?.rect.value = rect;
-                    _controllers[handle]?.id.value = id;
+              _controllers[handle]?.rect.value = rect;
+              _controllers[handle]?.id.value = id;
 
-                    // Notify about the first frame being rendered.
-                    if (rect.width > 0 && rect.height > 0) {
-                      final completer = _controllers[handle]
-                          ?.waitUntilFirstFrameRenderedCompleter;
-                      if (!(completer?.isCompleted ?? true)) {
-                        completer?.complete();
-                      }
-                    }
-                    break;
-                  }
-                default:
-                  {
-                    break;
-                  }
+              // Notify about the first frame being rendered.
+              if (rect.width > 0 && rect.height > 0) {
+                final completer =
+                    _controllers[handle]?.waitUntilFirstFrameRenderedCompleter;
+                if (!(completer?.isCompleted ?? true)) {
+                  completer?.complete();
+                }
               }
-            } catch (exception, stacktrace) {
-              debugPrint(exception.toString());
-              debugPrint(stacktrace.toString());
+              break;
             }
-          },
-        );
+          default:
+            {
+              break;
+            }
+        }
+      } catch (exception, stacktrace) {
+        debugPrint(exception.toString());
+        debugPrint(stacktrace.toString());
+      }
+    });
 }
