@@ -163,7 +163,7 @@ bool ANGLESurfaceManager::CreateD3DTexture() {
     } else {
       IDXGIFactory* dxgi = nullptr;
       ::CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&dxgi);
-      // As far as my experience goes, this is the safest approach. Passing NULL
+      // As far as profile experience goes, this is the safest approach. Passing NULL
       // (so-called default) seems to cause issues on Windows 7 or maybe some
       // older graphics drivers. First adapter is the default.
       // D3D_DRIVER_TYPE_UNKNOWN| must be passed with manual adapter selection.
