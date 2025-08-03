@@ -259,26 +259,27 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
 
   @override
   Widget build(BuildContext context) {
-    int textureId = _textureId;
-    if (textureId < 0) {
-      textureId = widget.controller.id.value ?? -1;
-    }
-
-    bool videoRenderStart = _videoRenderStart;
-    if (!videoRenderStart) {
-      videoRenderStart = widget.player.state.position.inMilliseconds > 0;
-    }
-
-    if (!videoRenderStart) {
-      final Size? size = widget.controller.rect.value?.size;
-      final double width = size?.width ?? -1;
-      final double height = size?.height ?? -1;
-
-      videoRenderStart = textureId > -1 && width > 0 && height > 0 && _playable;
-    }
-
     return LayoutBuilder(
       builder: (ctx, constraints) {
+        int textureId = _textureId;
+        if (textureId < 0) {
+          textureId = widget.controller.id.value ?? -1;
+        }
+
+        bool videoRenderStart = _videoRenderStart;
+        if (!videoRenderStart) {
+          videoRenderStart = widget.player.state.position.inMilliseconds > 0;
+        }
+
+        if (!videoRenderStart) {
+          final Size? size = widget.controller.rect.value?.size;
+          final double width = size?.width ?? -1;
+          final double height = size?.height ?? -1;
+
+          videoRenderStart =
+              textureId > -1 && width > 0 && height > 0 && _playable;
+        }
+
         final List<Widget> stack = [
           Container(
             width: constraints.maxWidth,
