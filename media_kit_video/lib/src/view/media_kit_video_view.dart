@@ -14,7 +14,7 @@ typedef MediaVideoSkinBuilder = Widget Function(
   Rect texturePosition,
 );
 
-const mediaKitVideoFullScreenRouteName = '_media_kit_video_full_screen';
+const mediaKitVideoFullScreenRouteName = '__media_kit_video_full_screen__';
 
 class MediaKitVideoView extends StatefulWidget {
   final MediaKitVideoController controller;
