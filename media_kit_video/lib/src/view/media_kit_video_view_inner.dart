@@ -31,6 +31,8 @@ class MediaKitVideoViewInner extends StatefulWidget {
 
   Player get player => controller.player;
 
+  WidgetBuilder? get backgroundBuilder => state.widget.backgroundBuilder;
+
   MediaVideoCoverBuilder? get coverBuilder => state.widget.coverBuilder;
 
   MediaVideoSkinBuilder? get skinBuilder => state.widget.skinBuilder;
@@ -285,8 +287,13 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
             width: constraints.maxWidth,
             height: constraints.maxHeight,
             color: widget.color,
-          ),
+          )
         ];
+
+        final Widget? background = widget.backgroundBuilder?.call(ctx);
+        if (background != null) {
+          stack.add(background);
+        }
 
         if (!videoRenderStart) {
           final Widget? cover = widget.coverBuilder?.call(ctx, widget.fit);
