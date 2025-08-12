@@ -318,6 +318,7 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
             size,
             widget.fit,
           );
+
           final Rect position = Rect.fromLTWH(
             offset.dx,
             offset.dy,
@@ -325,18 +326,10 @@ class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
             size.height,
           );
 
-          final Widget texture = _buildTexture(textureId);
-          stack.add(
-            Positioned.fromRect(
-              rect: position,
-              child: ColoredBox(
-                // tips: modify here - color
-                // color: const Color(0xFF000000),
-                color: Colors.transparent,
-                child: texture,
-              ),
-            ),
-          );
+          stack.add(Positioned.fromRect(
+            rect: position,
+            child: _buildTexture(textureId),
+          ));
 
           final Widget? skin = widget.skinBuilder?.call(
             widget.state,

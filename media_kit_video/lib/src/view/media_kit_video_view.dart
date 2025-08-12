@@ -79,23 +79,18 @@ class MediaKitVideoViewState extends State<MediaKitVideoView> {
     fullScreen = true;
 
     final NavigatorState navigator = Navigator.of(context, rootNavigator: true);
-    Future<Null> exit = navigator.push(
+    final Future<Null> exitFuture = navigator.push(
       PageRouteBuilder<Null>(
         settings: const RouteSettings(name: mediaKitVideoFullScreenRouteName),
         pageBuilder: (ctx, animation, secondaryAnimation) {
-          return AnimatedBuilder(
-            animation: animation,
-            builder: (innerCtx, child) {
-              return Scaffold(
-                resizeToAvoidBottomInset: false,
-                body: MediaKitVideoViewInner(
-                  state: this,
-                  fit: MediaKitVideoViewFit.contain,
-                  color: Colors.black,
-                  observer: _observer,
-                ),
-              );
-            },
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: MediaKitVideoViewInner(
+              state: this,
+              fit: MediaKitVideoViewFit.contain,
+              color: Colors.black,
+              observer: _observer,
+            ),
           );
         },
       ),
@@ -128,7 +123,7 @@ class MediaKitVideoViewState extends State<MediaKitVideoView> {
       }
     }
 
-    await exit;
+    await exitFuture;
 
     fullScreen = false;
 
