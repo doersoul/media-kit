@@ -52,7 +52,7 @@ import 'package:media_kit_video/src/video_controller/web_video_controller/web_vi
 /// * [VideoControllerConfiguration.enableHardwareAcceleration] is ignored i.e. GPU usage is dependent upon the web browser.
 ///
 /// {@endtemplate}
-class VideoController {
+class MediaKitVideoController {
   /// The [Player] instance associated with this [VideoController].
   final Player player;
 
@@ -69,7 +69,7 @@ class VideoController {
   final ValueNotifier<Rect?> rect = ValueNotifier<Rect?>(null);
 
   /// {@macro video_controller}
-  VideoController(
+  MediaKitVideoController(
     this.player, {
     VideoControllerConfiguration configuration =
         const VideoControllerConfiguration(),

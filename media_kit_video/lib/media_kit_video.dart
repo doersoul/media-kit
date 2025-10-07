@@ -6,9 +6,5 @@
 
 export 'package:media_kit_video/src/video_controller/platform_video_controller.dart';
 export 'package:media_kit_video/src/video_controller/video_controller.dart';
-export 'package:media_kit_video/src/video_view_parameters.dart';
-export 'package:media_kit_video/src/video/video.dart';
-
-export 'package:media_kit_video/src/subtitle/subtitle_view.dart';
-
-export 'package:media_kit_video/media_kit_video_controls/media_kit_video_controls.dart';
+export 'package:media_kit_video/src/model/media_kit_video_view_fit.dart';
+export 'package:media_kit_video/src/view/media_kit_video_view.dart';

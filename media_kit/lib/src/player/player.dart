@@ -132,7 +132,41 @@ class Player {
   PlayerStream get streams => stream;
 
   /// Disposes the [Player] instance & releases the resources.
+  bool disposed = false;
+
+  /// Pause the [Player] instance
+  bool paused = false;
+
+  /// setProperty only for native player
+  /// player.setProperty('ao', 'audiotrack');
+  Future<void> setProperty(String key, String value) async {
+    if (platform == null || platform is! NativePlayer) {
+      return;
+    }
+
+    NativePlayer nativePlayer = platform as NativePlayer;
+
+    return nativePlayer.setProperty(key, value);
+  }
+
+  /// setProperties only for native player
+  Future<void> setProperties(Map<String, String> properties) async {
+    if (platform == null || platform is! NativePlayer || properties.isEmpty) {
+      return;
+    }
+
+    final NativePlayer nativePlayer = platform as NativePlayer;
+
+    await Future.wait(properties.entries.map(
+      (entry) => nativePlayer.setProperty(entry.key, entry.value),
+    ));
+  }
+
+  /// Disposes the [Player] instance & releases the resources.
   Future<void> dispose() async {
+    disposed = true;
+    paused = true;
+
     return platform?.dispose();
   }
 
@@ -158,6 +192,8 @@ class Player {
     Playable playable, {
     bool play = true,
   }) async {
+    paused = false;
+
     return platform?.open(
       playable,
       play: play,
@@ -172,18 +208,22 @@ class Player {
 
   /// Starts playing the [Player].
   Future<void> play() async {
+    paused = false;
+
     return platform?.play();
   }
 
   /// Pauses the [Player].
   Future<void> pause() async {
+    paused = true;
+
     return platform?.pause();
   }
 
   /// Cycles between [play] & [pause] states of the [Player].
-  Future<void> playOrPause() async {
-    return platform?.playOrPause();
-  }
+  // Future<void> playOrPause() async {
+  //   return platform?.playOrPause();
+  // }
 
   /// Appends a [Media] to the [Player]'s playlist.
   Future<void> add(Media media) async {
