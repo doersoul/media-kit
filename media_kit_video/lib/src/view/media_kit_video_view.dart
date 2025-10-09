@@ -4,10 +4,10 @@ import 'package:media_kit_video/src/model/value_observer.dart';
 import 'package:media_kit_video/src/utils/orientation_utils.dart';
 import 'package:media_kit_video/src/view/media_kit_video_view_inner.dart';
 
-typedef MediaVideoCoverBuilder = Widget Function(
+typedef MediaKitVideoCoverBuilder = Widget Function(
     BuildContext context, MediaKitVideoViewFit fit);
 
-typedef MediaVideoSkinBuilder = Widget Function(
+typedef MediaKitVideoSkinBuilder = Widget Function(
   MediaKitVideoViewState viewState,
   Size viewSize,
   Rect texturePosition,
@@ -25,8 +25,8 @@ class MediaKitVideoView extends StatefulWidget {
   final VoidCallback? onEnterFullScreen;
   final VoidCallback? onExitFullScreen;
   final WidgetBuilder? backgroundBuilder;
-  final MediaVideoCoverBuilder? coverBuilder;
-  final MediaVideoSkinBuilder? skinBuilder;
+  final MediaKitVideoCoverBuilder? coverBuilder;
+  final MediaKitVideoSkinBuilder? skinBuilder;
 
   const MediaKitVideoView({
     super.key,

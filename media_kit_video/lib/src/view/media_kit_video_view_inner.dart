@@ -31,9 +31,9 @@ class MediaKitVideoViewInner extends StatefulWidget {
 
   WidgetBuilder? get backgroundBuilder => state.widget.backgroundBuilder;
 
-  MediaVideoCoverBuilder? get coverBuilder => state.widget.coverBuilder;
+  MediaKitVideoCoverBuilder? get coverBuilder => state.widget.coverBuilder;
 
-  MediaVideoSkinBuilder? get skinBuilder => state.widget.skinBuilder;
+  MediaKitVideoSkinBuilder? get skinBuilder => state.widget.skinBuilder;
 }
 
 class _MediaKitVideoViewInnerState extends State<MediaKitVideoViewInner> {
