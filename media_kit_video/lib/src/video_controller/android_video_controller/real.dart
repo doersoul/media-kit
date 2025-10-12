@@ -68,7 +68,9 @@ class AndroidVideoController extends PlatformVideoController {
           if (configuration.vo == 'mediacodec_embed') 'vid': vidValue,
         },
       );
-      await player.seek(Duration.zero);
+      if (!player.disposed) {
+        await player.seek(Duration.zero);
+      }
     });
   }
 
