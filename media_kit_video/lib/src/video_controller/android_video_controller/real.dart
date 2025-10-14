@@ -69,7 +69,8 @@ class AndroidVideoController extends PlatformVideoController {
         },
       );
       if (!player.disposed) {
-        await player.seek(Duration.zero);
+        final currentPosition = player.state.position;
+        await player.seek(currentPosition);
       }
     });
   }
