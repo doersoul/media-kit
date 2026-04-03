@@ -33,19 +33,19 @@ environment:
 
 dependencies:
   collection: ^1.19.1
-  image: ^4.5.4
+  image: ^4.8.0
   meta: ^1.17.0
   path: ^1.9.1
-  safe_local_storage: ^2.0.1
+  safe_local_storage: ^2.0.3
   synchronized: ^3.4.0
   universal_platform: ^1.1.0
   uri_parser: ^3.0.2
-  uuid: ^4.5.2
+  uuid: ^4.5.3
   web: ^1.1.1
 
 dev_dependencies:
-  test: ^1.24.1
-  lints: ^6.0.0
+  test: ^1.31.0
+  lints: ^6.1.0
 
 ffigen:
   name: MPV
