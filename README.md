@@ -46,8 +46,8 @@
 
 ```yaml
 dependencies:
-  media_kit: ^1.2.1 # Primary package.
-  media_kit_video: ^1.3.1 # For video rendering.
+  media_kit: ^1.2.6 # Primary package.
+  media_kit_video: ^2.0.1 # For video rendering.
   media_kit_libs_video: ^1.0.7 # Native video dependencies.
 ```
 
@@ -55,7 +55,7 @@ dependencies:
 
 ```yaml
 dependencies:
-  media_kit: ^1.2.1 # Primary package.
+  media_kit: ^1.2.6 # Primary package.
   media_kit_libs_audio: ^1.0.7 # Native audio dependencies.
 ```
 
@@ -472,7 +472,7 @@ The following state(s) are available as events:
 | `Stream<bool>`              | `buffering`    | Whether buffering or not.                                                                                |
 | `Stream<Duration>`          | `buffer`       | Current buffer position. This indicates how much of the stream has been decoded & cached by the demuxer. |
 | `Stream<PlaylistMode>`      | `playlistMode` | Current playlist mode.                                                                                   |
-| `Stream<bool>`              | `shuffle`      | Whether playlist is shuffled or not.
+| `Stream<bool>`              | `shuffle`      | Whether playlist is shuffled or not.                                                                     |
 | `Stream<AudioParams>`       | `audioParams`  | Audio parameters of the currently playing media source e.g. sample rate, channels, etc.                  |
 | `Stream<VideoParams>`       | `videoParams`  | Video parameters of the currently playing media source e.g. width, height, rotation etc.                 |
 | `Stream<double?>`           | `audioBitrate` | Audio bitrate of the currently playing media source.                                                     |
@@ -615,9 +615,9 @@ List<SubtitleTrack> subtitles = player.state.tracks.subtitle;
 
 // Get notified as [Stream]:
 player.stream.tracks.listen((event) {
-  List<VideoTrack> videos = event.video;
-  List<AudioTrack> audios = event.audio;
-  List<SubtitleTrack> subtitles = event.subtitle;
+List<VideoTrack> videos = event.video;
+List<AudioTrack> audios = event.audio;
+List<SubtitleTrack> subtitles = event.subtitle;
 });
 ```
 
@@ -638,9 +638,9 @@ SubtitleTrack subtitle = player.state.track.subtitle;
 
 // Get notified as [Stream]:
 player.stream.track.listen((event) {
-  VideoTrack video = event.video;
-  AudioTrack audio = event.audio;
-  SubtitleTrack subtitle = event.subtitle;
+VideoTrack video = event.video;
+AudioTrack audio = event.audio;
+SubtitleTrack subtitle = event.subtitle;
 });
 ```
 
@@ -671,7 +671,7 @@ List<AudioDevice> devices = player.state.audioDevices;
 
 // Get notified as [Stream]:
 player.stream.audioDevices.listen((event) {
-  List<AudioDevice> devices = event;
+List<AudioDevice> devices = event;
 });
 ```
 
@@ -688,7 +688,7 @@ AudioDevice device = player.state.audioDevice;
 
 // Get notified as [Stream]:
 player.stream.audioDevice.listen((event) {
-  AudioDevice device = event;
+AudioDevice device = event;
 });
 ```
 
@@ -767,20 +767,20 @@ Notably, `TextStyle`, `TextAlign` & `EdgeInsetsGeometry` can be provided.
 
 ```dart
 Video(
-  controller: controller,
-  subtitleViewConfiguration: const SubtitleViewConfiguration(
-    style: TextStyle(
-      height: 1.4,
-      fontSize: 24.0,
-      letterSpacing: 0.0,
-      wordSpacing: 0.0,
-      color: Color(0xffffffff),
-      fontWeight: FontWeight.normal,
-      backgroundColor: Color(0xaa000000),
-    ),
-    textAlign: TextAlign.center,
-    padding: EdgeInsets.all(24.0),
-  ),
+controller: controller,
+subtitleViewConfiguration: const SubtitleViewConfiguration(
+style: TextStyle(
+height: 1.4,
+fontSize: 24.0,
+letterSpacing: 0.0,
+wordSpacing: 0.0,
+color: Color(0xffffffff),
+fontWeight: FontWeight.normal,
+backgroundColor: Color(0xaa000000),
+),
+textAlign: TextAlign.center,
+padding: EdgeInsets.all(24.0),
+),
 );
 ```
 
@@ -792,11 +792,11 @@ The `SubtitleTrack.uri` constructor can be used to load external subtitle track 
 
 ```dart
 await player.setSubtitleTrack(
-  SubtitleTrack.uri(
-    'https://www.iandevlin.com/html5test/webvtt/upc-video-subtitles-en.vtt',
-    title: 'English',
-    language: 'en',
-  ),
+SubtitleTrack.uri(
+'https://www.iandevlin.com/html5test/webvtt/upc-video-subtitles-en.vtt',
+title: 'English',
+language: 'en',
+),
 );
 ```
 
@@ -804,8 +804,8 @@ The `SubtitleTrack.data` constructor can be used to load external subtitle track
 
 ```dart
 player.setSubtitleTrack(
-  SubtitleTrack.data(
-    '''WEBVTT FILE
+SubtitleTrack.data(
+'''WEBVTT FILE
 
 1
 00:00:03.500 --> 00:00:05.000 D:vertical A:start
@@ -839,9 +839,9 @@ UPC
 00:00:28.000 --> 00:00:30.000 L:75%
 Simply for <u>everyone</u>
 ''',
-    title: 'English',
-    language: 'en',
-  ),
+title: 'English',
+language: 'en',
+),
 );
 ```
 
@@ -851,11 +851,11 @@ The `AudioTrack.uri` constructor can be used to load external audio track **with
 
 ```dart
 await player.setAudioTrack(
-  AudioTrack.uri(
-    'https://www.iandevlin.com/html5test/webvtt/v/upc-tobymanley.mp4',
-    title: 'English',
-    language: 'en',
-  ),
+AudioTrack.uri(
+'https://www.iandevlin.com/html5test/webvtt/v/upc-tobymanley.mp4',
+title: 'English',
+language: 'en',
+),
 );
 ```
 
@@ -904,21 +904,21 @@ Modify the `controls` argument. For advanced theming of existing video controls,
 
 ```dart
 Scaffold(
-  body: Video(
-    controller: controller,
-    // Select [MaterialVideoControls].
-    controls: MaterialVideoControls,
-  ),
+body: Video(
+controller: controller,
+// Select [MaterialVideoControls].
+controls: MaterialVideoControls,
+),
 );
 ```
 
 ```dart
 Scaffold(
-  body: Video(
-    controller: controller,
-    // Select [CupertinoVideoControls].
-    controls: CupertinoVideoControls,
-  ),
+body: Video(
+controller: controller,
+// Select [CupertinoVideoControls].
+controls: CupertinoVideoControls,
+),
 );
 ```
 
@@ -928,27 +928,27 @@ Pass custom builder `Widget Function(BuildContext, VideoController)` as `control
 
 ```dart
 Scaffold(
-  body: Video(
-    controller: controller,
-    // Provide custom builder for controls.
-    controls: (state) {
-      return Center(
-        child: IconButton(
-          onPressed: () {
-            state.widget.controller.player.playOrPause();
-          },
-          icon: StreamBuilder(
-            stream: state.widget.controller.player.stream.playing,
-            builder: (context, playing) => Icon(
-              playing.data == true ? Icons.pause : Icons.play_arrow,
-            ),
-          ),
-          // It's not necessary to use [StreamBuilder] or to use [Player] & [VideoController] from [state].
-          // [StreamSubscription]s can be made inside [initState] of this widget.
-        ),
-      );
-    },
-  ),
+body: Video(
+controller: controller,
+// Provide custom builder for controls.
+controls: (state) {
+return Center(
+child: IconButton(
+onPressed: () {
+state.widget.controller.player.playOrPause();
+},
+icon: StreamBuilder(
+stream: state.widget.controller.player.stream.playing,
+builder: (context, playing) => Icon(
+playing.data == true ? Icons.pause : Icons.play_arrow,
+),
+),
+// It's not necessary to use [StreamBuilder] or to use [Player] & [VideoController] from [state].
+// [StreamSubscription]s can be made inside [initState] of this widget.
+),
+);
+},
+),
 );
 ```
 
@@ -970,32 +970,32 @@ Scaffold(
 ```dart
 // Wrap [Video] widget with [MaterialVideoControlsTheme].
 MaterialVideoControlsTheme(
-  normal: MaterialVideoControlsThemeData(
-    // Modify theme options:
-    buttonBarButtonSize: 24.0,
-    buttonBarButtonColor: Colors.white,
-    // Modify top button bar:
-    topButtonBar: [
-      const Spacer(),
-      MaterialDesktopCustomButton(
-        onPressed: () {
-          debugPrint('Custom "Settings" button pressed.');
-        },
-        icon: const Icon(Icons.settings),
-      ),
-    ],
-  ),
-  fullscreen: const MaterialVideoControlsThemeData(
-    // Modify theme options:
-    displaySeekBar: false,
-    automaticallyImplySkipNextButton: false,
-    automaticallyImplySkipPreviousButton: false,
-  ),
-  child: Scaffold(
-    body: Video(
-      controller: controller,
-    ),
-  ),
+normal: MaterialVideoControlsThemeData(
+// Modify theme options:
+buttonBarButtonSize: 24.0,
+buttonBarButtonColor: Colors.white,
+// Modify top button bar:
+topButtonBar: [
+const Spacer(),
+MaterialDesktopCustomButton(
+onPressed: () {
+debugPrint('Custom "Settings" button pressed.');
+},
+icon: const Icon(Icons.settings),
+),
+],
+),
+fullscreen: const MaterialVideoControlsThemeData(
+// Modify theme options:
+displaySeekBar: false,
+automaticallyImplySkipNextButton: false,
+automaticallyImplySkipPreviousButton: false,
+),
+child: Scaffold(
+body: Video(
+controller: controller,
+),
+),
 );
 ```
 
@@ -1017,34 +1017,34 @@ MaterialVideoControlsTheme(
 ```dart
 // Wrap [Video] widget with [MaterialDesktopVideoControlsTheme].
 MaterialDesktopVideoControlsTheme(
-  normal: MaterialDesktopVideoControlsThemeData(
-    // Modify theme options:
-    seekBarThumbColor: Colors.blue,
-    seekBarPositionColor: Colors.blue,
-    toggleFullscreenOnDoublePress: false,
-    // Modify top button bar:
-    topButtonBar: [
-      const Spacer(),
-      MaterialDesktopCustomButton(
-        onPressed: () {
-          debugPrint('Custom "Settings" button pressed.');
-        },
-        icon: const Icon(Icons.settings),
-      ),
-    ],
-    // Modify bottom button bar:
-    bottomButtonBar: const [
-      Spacer(),
-      MaterialDesktopPlayOrPauseButton(),
-      Spacer(),
-    ],
-  ),
-  fullscreen: const MaterialDesktopVideoControlsThemeData(),
-  child: Scaffold(
-    body: Video(
-      controller: controller,
-    ),
-  ),
+normal: MaterialDesktopVideoControlsThemeData(
+// Modify theme options:
+seekBarThumbColor: Colors.blue,
+seekBarPositionColor: Colors.blue,
+toggleFullscreenOnDoublePress: false,
+// Modify top button bar:
+topButtonBar: [
+const Spacer(),
+MaterialDesktopCustomButton(
+onPressed: () {
+debugPrint('Custom "Settings" button pressed.');
+},
+icon: const Icon(Icons.settings),
+),
+],
+// Modify bottom button bar:
+bottomButtonBar: const [
+Spacer(),
+MaterialDesktopPlayOrPauseButton(),
+Spacer(),
+],
+),
+fullscreen: const MaterialDesktopVideoControlsThemeData(),
+child: Scaffold(
+body: Video(
+controller: controller,
+),
+),
 );
 ```
 
@@ -1085,17 +1085,17 @@ MaterialDesktopVideoControlsTheme(
 ```dart
 // Wrap [Video] widget with [CupertinoVideoControlsTheme].
 CupertinoVideoControlsTheme(
-  normal: const CupertinoVideoControlsThemeData(
-    // W.I.P.
-  ),
-  fullscreen: const CupertinoVideoControlsThemeData(
-    // W.I.P.
-  ),
-  child: Scaffold(
-    body: Video(
-      controller: controller,
-    ),
-  ),
+normal: const CupertinoVideoControlsThemeData(
+// W.I.P.
+),
+fullscreen: const CupertinoVideoControlsThemeData(
+// W.I.P.
+),
+child: Scaffold(
+body: Video(
+controller: controller,
+),
+),
 );
 ```
 
@@ -1524,55 +1524,55 @@ Edit `android/app/src/main/AndroidManifest.xml` to add the following permissions
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.app">
-    <application
-      ...
-      />
-    </application>
-    <!--
-      Internet access permissions.
-      -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!--
-      Media access permissions.
-      Android 13 or higher.
-      https://developer.android.com/about/versions/13/behavior-changes-13#granular-media-permissions
-      -->
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <!--
-      Storage access permissions.
-      Android 12 or lower.
-      -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-</manifest>
+  <application
+  ...
+  />
+</application>
+        <!--
+          Internet access permissions.
+          -->
+<uses-permission android:name="android.permission.INTERNET" />
+        <!--
+          Media access permissions.
+          Android 13 or higher.
+          https://developer.android.com/about/versions/13/behavior-changes-13#granular-media-permissions
+          -->
+<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+        <!--
+          Storage access permissions.
+          Android 12 or lower.
+          -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        </manifest>
 ```
 
 Use [`package:permission_handler`](https://pub.dev/packages/permission_handler) to request access at runtime:
 
 ```dart
 if (/* Android 13 or higher. */) {
-  // Video permissions.
-  if (await Permission.videos.isDenied || await Permission.videos.isPermanentlyDenied) {
-    final state = await Permission.videos.request();
-    if (!state.isGranted) {
-      await SystemNavigator.pop();
-    }
-  }
-  // Audio permissions.
-  if (await Permission.audio.isDenied || await Permission.audio.isPermanentlyDenied) {
-    final state = await Permission.audio.request();
-    if (!state.isGranted) {
-      await SystemNavigator.pop();
-    }
-  }
+// Video permissions.
+if (await Permission.videos.isDenied || await Permission.videos.isPermanentlyDenied) {
+final state = await Permission.videos.request();
+if (!state.isGranted) {
+await SystemNavigator.pop();
+}
+}
+// Audio permissions.
+if (await Permission.audio.isDenied || await Permission.audio.isPermanentlyDenied) {
+final state = await Permission.audio.request();
+if (!state.isGranted) {
+await SystemNavigator.pop();
+}
+}
 } else {
-  if (await Permission.storage.isDenied || await Permission.storage.isPermanentlyDenied) {
-    final state = await Permission.storage.request();
-    if (!state.isGranted) {
-      await SystemNavigator.pop();
-    }
-  }
+if (await Permission.storage.isDenied || await Permission.storage.isPermanentlyDenied) {
+final state = await Permission.storage.request();
+if (!state.isGranted) {
+await SystemNavigator.pop();
+}
+}
 }
 ```
 
@@ -1585,8 +1585,8 @@ Edit `ios/Runner/Info-Release.plist`, `ios/Runner/Info-Profile.plist`, `ios/Runn
 ```xml
 <key>NSAppTransportSecurity</key>
 <dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
+<key>NSAllowsArbitraryLoads</key>
+<true/>
 </dict>
 ```
 
